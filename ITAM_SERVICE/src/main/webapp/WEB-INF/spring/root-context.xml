@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+	
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:15299/ITAM?allowMultiQueries=true" />
+		<property name="username" value="itam_dev" />
+		<property name="password" value="dream1004" />
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- <bean id="msDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+		<property name="url" value="jdbc:sqlserver://localhost:7933;DatabaseName=KERP"/>
+		<property name="username" value="sa"/>
+		<property name="password" value="!t@dmin100$krc96(^"/>
+	</bean>
+	
+	<bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="msDataSource"/>
+	</bean>
+	
+	<bean id="msDataSource2" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+		<property name="url" value="jdbc:sqlserver://localhost:7933;DatabaseName=KRSMART"/>
+		<property name="username" value="sa"/>
+		<property name="password" value="!t@dmin100$krc96(^"/>
+	</bean>
+	
+	<bean id="sqlSessionFactory3" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="msDataSource2"/>
+    </bean> -->
+    
+    <bean id="dataSource2" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:15299/ITAM_ADMIN?allowMultiQueries=true" />
+		<property name="username" value="itam_dev" />
+		<property name="password" value="dream1004" />
+	</bean>
+	
+	<bean id="sqlSessionFactory4" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource2"></property>
+	</bean>
+	
+	<!-- 메일보내기 -->
+	<bean id="mailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl">
+	   <property name="host" value="smtp.gmail.com" />
+	   <property name="port" value="587" />
+	   <property name="username" value="dlruddh92@gmail.com" />
+	   <property name="password" value="DLruddh92!" />
+	   <property name="javaMailProperties">
+	      <props>
+	            <prop key="mail.transport.protocol">smtp</prop>
+	            <prop key="mail.smtp.auth">true</prop>
+	            <prop key="mail.smtp.starttls.enable">true</prop>
+	            <prop key="mail.debug">true</prop>
+	      </props>
+	   </property>
+	
+	</bean>
+	
+	<mybatis-spring:scan base-package="com.dreamsecurity.itam.mapper" factory-ref="sqlSessionFactory"/>
+	<!-- 	
+	<mybatis-spring:scan base-package="com.dreamsecurity.itam.msMapper" factory-ref="sqlSessionFactory2"/>
+	<mybatis-spring:scan base-package="com.dreamsecurity.itam.msMapper" factory-ref="sqlSessionFactory3"/>
+	 -->
+	<mybatis-spring:scan base-package="com.dreamsecurity.itam.serviceMapper" factory-ref="sqlSessionFactory4"/>
+	<context:component-scan base-package="com.dreamsecurity.itam.service" />
+	
+</beans>

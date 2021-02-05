@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dreamsecurity.itam.mapper.LoginMapper">
+	<select id="getLoginInfo" parameterType="java.util.Map" resultType="com.dreamsecurity.itam.domain.LoginVo">
+	SELECT cpId, pwd, salt
+		FROM ITAM_CP_LOGIN
+  		WHERE cpId = #{cpId}
+	</select>
+	
+	<update id="updateFindPwdInfo" parameterType="com.dreamsecurity.itam.domain.LoginVo">
+			UPDATE ITAM_CP_LOGIN
+			SET pwd = #{pwd},
+				salt = #{salt},
+				updateDate = sysdate()
+			WHERE cpId = #{cpId}
+	</update>
+	
+	<!-- INSERT START -->
+	<insert id="insertLoginInfo" parameterType="com.dreamsecurity.itam.domain.SignUpVo">
+		insert into ITAM_CP_LOGIN (
+			cpId, pwd, salt, regDate
+		) VALUES(
+			#{cpId}, #{pwd}, #{salt}, sysdate()
+		)
+	</insert>
+	
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dreamsecurity.itam.serviceMapper.ServiceMapper">
+	<select id="getLoginInfo" parameterType="java.util.Map" resultType="com.dreamsecurity.itam.domain.SignUpVo">
+	SELECT *
+		FROM ITAM_CP_INFO
+  		WHERE cpId = #{cpId}
+	</select>
+	
+	<select id="findPwdRequest" parameterType="java.util.Map" resultType="com.dreamsecurity.itam.domain.LoginVo">
+	SELECT *
+		FROM ITAM_CP_INFO
+  		WHERE cpId = #{cpId}
+  		AND	cpRegNum = #{cpRegNum}
+	</select>
+	
+	<select id="findIdRequest" parameterType="java.util.Map" resultType="com.dreamsecurity.itam.domain.LoginVo">
+	SELECT *
+		FROM ITAM_CP_INFO
+  		WHERE psName = #{psName}
+  		AND	email = #{email}
+	</select>
+	
+	<select id="cpIdCheck" parameterType="java.util.Map" resultType="com.dreamsecurity.itam.domain.SignUpVo">
+	SELECT cpId
+		FROM ITAM_CP_INFO
+  		WHERE cpId = #{cpId}
+	</select>
+	
+	<insert id="insertTempCertNum" parameterType="java.util.Map">
+		INSERT INTO ITAM_CP_INFO (
+			email, tempCertNum, sendDate
+		) VALUES (
+			#{email}, #{tempCertNum}, sysdate()
+		)
+	</insert>
+	
+	<!-- INSERT START -->
+	<insert id="insertSignUpRequest" parameterType="com.dreamsecurity.itam.domain.SignUpVo">
+		insert into ITAM_CP_INFO (
+			cpId, cpName, cpRegNum, cpCeo, phNum, fax, email, psName, zipCode, addr1, addr2, cpRegImg, orgCpRegImg, regMemo, 
+			serviceStatus, freeYn, freePriod, regDate
+		) VALUES(
+			#{cpId}, #{cpName}, #{cpRegNum}, #{cpCeo}, #{phNum},
+			<choose>
+		 		<when test="fax != null and fax != ''">
+		 			#{fax},
+		 		</when>
+		 		<otherwise>
+	  				null,
+	  			</otherwise>
+  			</choose>
+  			#{email}, #{psName}, #{zipCode}, #{addr1}, #{addr2}, #{cpRegImg}, #{orgCpRegImg}, 
+  			<choose>
+		 		<when test="regMemo != null and regMemo != ''">
+		 			#{regMemo},
+		 		</when>
+		 		<otherwise>
+	  				null,
+	  			</otherwise>
+  			</choose>
+  			0, 'Y', 90, sysdate()
+		)
+	</insert>
+	
+	<insert id="insertSignUpContractInfo" parameterType="com.dreamsecurity.itam.domain.SignUpVo">
+		insert into ITAM_CP_CONTRACT (
+			contNum, cpId, contStatus, regDate
+		) VALUES(
+			#{contNum}, #{cpId}, #{contStatus}, sysdate()
+		)
+	</insert>
+	
+	<insert id="insertSendEmailResult" parameterType="com.dreamsecurity.itam.domain.SignUpVo">
+		insert into ITAM_EMAIL_HISTORY (
+			contNum, cpId, contStatus, regDate
+		) VALUES(
+			#{contNum}, #{cpId}, #{contStatus}, sysdate()
+		)
+	</insert>
+	
+	
+	
+</mapper>
